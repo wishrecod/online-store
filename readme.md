@@ -32,6 +32,9 @@ Welcome to the **Online Clothing Store**, a portfolio project showcasing a moder
 - Django (Python)
 - Django REST Framework
 
+### Frontend
+- HTML, CSS, JavaScript (for minimal interactivity)
+
 ### Database
 - SQLite (can be replaced with PostgreSQL/MySQL for production)
 
@@ -43,8 +46,8 @@ Welcome to the **Online Clothing Store**, a portfolio project showcasing a moder
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/online-clothing-store.git
-   cd online-clothing-store
+   git clone https://github.com/wishrecod/online-store.git
+   cd online-store
    ```
 
 2. Create a virtual environment and install dependencies:
@@ -99,8 +102,13 @@ Welcome to the **Online Clothing Store**, a portfolio project showcasing a moder
 └── README.md
 ```
 
+## Future Enhancements
+
+- Add payment gateway integration.
+- Improve product recommendations.
+- Add support for user reviews and ratings.
 
 ## License
 
-This project is open source, for portfolio.
+This project is open source and available under the [MIT License](LICENSE).
 
