@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-6 sm:px-12 py-16">
+    <h1 class="text-4xl font-extrabold text-white mb-8">Детали заказа</h1>
+    
+    <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+        <p class="text-white">Дата заказа: <span class="font-semibold">{{ order.created_at }}</span></p>
+        <p class="text-white mt-4">Статус оплаты: 
+            {% if order.is_paid %}
+                <span class="text-green-500 font-semibold">Оплачен</span>
+            {% else %}
+                <span class="text-red-500 font-semibold">Не оплачен</span>
+            {% endif %}
+        </p>
+        {% if user.is_staff and not order.is_paid %}
+            <a href="{% url 'mark_order_as_paid' order.id %}" class="mt-4 inline-block px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-500 transition duration-300">Отметить как оплаченный</a>
+        {% endif %}
+        
+        <p class="mt-6 text-white">Итоговая сумма: <span class="font-semibold text-orange-600">{{ order.total_price }} руб.</span></p>
+        
+        <h2 class="text-2xl font-bold text-white mt-8">Товары:</h2>
+        <ul class="space-y-4 mt-4">
+            {% for item in order.items.all %}
+                <li class="text-white">
+                    <p>{{ item.product.name }} - {{ item.quantity }} x {{ item.price }} руб.</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mt-8 text-center">
+        <a href="{% url 'product_list' %}" class="px-6 py-3 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition duration-300">Вернуться к покупкам</a>
+    </div>
+</div>
+{% endblock %}

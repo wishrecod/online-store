@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-6 sm:px-12 py-16">
+    <h1 class="text-4xl font-extrabold text-white mb-8">История заказов</h1>
+    
+    <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+        {% if orders %}
+            <ul class="space-y-6">
+                {% for order in orders %}
+                    <li class="border-b border-gray-700 py-4">
+                        <div class="flex justify-between items-center">
+                            <div class="text-white">
+                                <p class="text-xl font-semibold">Заказ №{{ order.id }}</p>
+                                <p class="mt-2">Дата: {{ order.created_at }}</p>
+                                <p class="mt-2">Сумма: <span class="font-bold text-orange-600">{{ order.total_price }} руб.</span></p>
+                                <p class="mt-2">
+                                    Статус: 
+                                    {% if order.is_paid %}
+                                        <span class="text-green-500">Оплачен</span>
+                                    {% else %}
+                                        <span class="text-red-500">Не оплачен</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <a href="{% url 'order_detail' order.id %}" class="text-orange-600 hover:text-orange-500 font-medium transition duration-300">
+                                Посмотреть детали
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center text-gray-400">Вы еще не совершали заказов.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

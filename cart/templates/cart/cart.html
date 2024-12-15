@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-6 sm:px-12 py-16">
+    <h1 class="text-4xl font-extrabold text-white mb-8">Ваша корзина</h1>
+    
+    <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+        {% if cart_items %}
+            <ul id="cart-items" class="space-y-4">
+                {% for item in cart_items %}
+                    <li id="cart-item-{{ item.id }}" class="flex justify-between items-center py-4 border-b border-gray-700">
+                        <div class="flex items-center space-x-4">
+                            <p class="text-white">{{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} руб.</p>
+                        </div>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="text-red-500 hover:text-red-400 font-medium transition duration-300">Удалить</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="mt-6 flex justify-between items-center">
+                <p class="text-xl font-semibold text-white">Итоговая сумма: <span id="total-price">{{ total_price }}</span> руб.</p>
+                <a href="{% url 'create_order' %}" class="px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-500 transition duration-300">Оформить заказ</a>
+            </div>
+        {% else %}
+            <p class="text-center text-gray-400">Ваша корзина пуста.</p>
+        {% endif %}
+    </div>
+
+    <div class="mt-8 text-center">
+        <a href="{% url 'product_list' %}" class="px-6 py-3 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition duration-300">Продолжить покупки</a>
+    </div>
+</div>
+
+<script>
+const socket = new WebSocket('ws://127.0.0.1:8000/ws/cart/');
+
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    console.log("Получено сообщение:", data.message);
+
+    if (data.message === "Cart updated successfully!") {
+        // Обновляем корзину на клиенте
+        fetch('/cart/')
+            .then(response => response.text())
+            .then(html => {
+                // Обновляем контент корзины на странице
+                const cartContainer = document.getElementById('cart-items');
+                cartContainer.innerHTML = new DOMParser().parseFromString(html, 'text/html').getElementById('cart-items').innerHTML;
+
+                // Обновляем итоговую сумму
+                const totalPrice = document.getElementById('total-price');
+                totalPrice.innerText = new DOMParser().parseFromString(html, 'text/html').getElementById('total-price').innerText;
+            })
+            .catch(error => console.error('Ошибка при обновлении корзины:', error));
+    }
+};
+</script>
+
+{% endblock %}

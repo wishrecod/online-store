@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Главный баннер -->
+<section class="relative h-96 bg-cover bg-center" style="background-image: url('/static/images/banner.jpg');">
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+    <div class="relative z-10 text-white text-center flex justify-center items-center h-full">
+        <div class="px-6 max-w-xl mx-auto">
+            <h1 class="text-5xl font-extrabold leading-tight">Добро пожаловать в наш магазин</h1>
+            <p class="mt-4 text-xl">Откройте для себя стильные и качественные товары для любого случая.</p>
+            <a href="{% url 'product_list' %}" class="mt-6 inline-block px-8 py-4 bg-orange-600 text-white font-semibold rounded-md hover:bg-orange-500 transition ease-in-out duration-300">Посмотреть товары</a>
+        </div>
+    </div>
+</section>
+
+<!-- Популярные товары -->
+<section class="py-16 bg-gray-800">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-extrabold text-center text-white">Популярные товары</h2>
+        <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+            {% for product in products %}
+                <div class="bg-gray-700 p-6 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl duration-300">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-md mb-4">
+                    <h3 class="text-xl font-semibold text-white">{{ product.name }}</h3>
+                    <p class="text-orange-500 mt-2">{{ product.price }} руб.</p>
+                    <a href="{% url 'product_detail' product.id %}" class="mt-4 inline-block px-6 py-2 bg-orange-600 text-white font-semibold rounded-md hover:bg-orange-500 transition duration-300">Подробнее</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
+<footer class="bg-gray-800 py-12 text-white text-center">
+    <p class="text-lg">&copy; 2024 Наш магазин. Все права защищены.</p>
+    <div class="mt-6">
+        <a href="#" class="mr-8 hover:text-orange-500">О нас</a>
+        <a href="#" class="mr-8 hover:text-orange-500">Контакты</a>
+        <a href="#" class="hover:text-orange-500">Политика конфиденциальности</a>
+    </div>
+</footer>
+{% endblock %}

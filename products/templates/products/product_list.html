@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-6 sm:px-12 py-16">
+    <h1 class="text-4xl font-extrabold text-white mb-8">Каталог товаров</h1>
+
+    <!-- Поиск и фильтры -->
+    <div class="flex flex-col sm:flex-row justify-between mb-8">
+        <form method="GET" action="{% url 'product_list' %}" class="flex items-center space-x-4">
+            <input type="text" name="q" placeholder="Поиск..." value="{{ query }}" class="p-3 bg-gray-700 text-white border border-gray-600 rounded-md w-64">
+            <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-300">Поиск</button>
+        </form>
+
+        <form method="GET" action="{% url 'product_list' %}" class="mt-4 sm:mt-0">
+            <select name="category" class="p-3 bg-gray-700 text-white border border-gray-600 rounded-md">
+                <option value="">Все категории</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == request.GET.category %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-500 transition duration-300">Фильтровать</button>
+        </form>
+    </div>
+
+    <!-- Список товаров -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        {% for product in products %}
+            <div class="bg-gray-700 p-6 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl duration-300">
+                <a href="{% url 'product_detail' product.id %}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-md mb-4">
+                </a>
+                <h2 class="text-xl font-semibold text-white">{{ product.name }}</h2>
+                <p class="text-gray-300 mt-2">{{ product.description }}</p>
+                <p class="mt-2 text-lg font-bold text-orange-600">{{ product.price }} руб.</p>
+                <a href="{% url 'add_to_cart' product.id %}" class="block mt-4 px-6 py-3 bg-orange-600 text-white text-center rounded-md hover:bg-orange-500 transition duration-300">
+                    Добавить в корзину
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация -->
+    <div class="mt-8 text-center">
+        <div class="inline-flex space-x-2">
+            {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="px-6 py-3 bg-gray-700 rounded hover:bg-gray-600">Назад</a>
+            {% endif %}
+
+            <span class="px-6 py-3 bg-gray-600 rounded">{{ products.number }} / {{ products.paginator.num_pages }}</span>
+
+            {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="px-6 py-3 bg-gray-700 rounded hover:bg-gray-600">Вперед</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

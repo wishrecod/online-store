@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>{% block title %}Магазин{% endblock %}</title>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Навигационная панель -->
+    <nav class="flex items-center justify-between p-4 bg-gray-800">
+        <div class="flex items-center space-x-4">
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500">Выйти</button>
+                </form>
+                <a href="{% url 'order_history' %}" class="hover:text-orange-500">История заказов</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="hover:text-orange-500">Вход</a>
+                <a href="{% url 'register' %}" class="hover:text-orange-500">Регистрация</a>
+            {% endif %}
+        </div>
+
+        <!-- Кнопка корзины -->
+        <a href="{% url 'cart_view' %}" class="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-500 transition duration-300">Корзина</a>
+    </nav>
+
+    <hr class="border-gray-700">
+
+    {% block content %}{% endblock %}
+</body>
+</html>
