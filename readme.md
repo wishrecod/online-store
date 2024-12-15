@@ -102,13 +102,6 @@ Welcome to the **Online Clothing Store**, a portfolio project showcasing a moder
 └── README.md
 ```
 
-## Future Enhancements
 
-- Add payment gateway integration.
-- Improve product recommendations.
-- Add support for user reviews and ratings.
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source
 
